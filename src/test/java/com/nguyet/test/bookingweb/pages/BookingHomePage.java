@@ -128,6 +128,12 @@ public class BookingHomePage extends BookingBasePage {
         return this;
     }
 
+    /**
+     * method choose checkin date in the calendar
+     *
+     * @param date - a LocalDate variable represent the check-in date
+     * @return BookingHomePage .this
+     */
     public BookingHomePage chooseCheckinDate(LocalDate date) {
         Assert.assertFalse(date.isBefore(LocalDate.now()));
         waitForVisibilityOfCalendar();
@@ -141,9 +147,9 @@ public class BookingHomePage extends BookingBasePage {
     /**
      * method choose checkin and checkout date in the calendar
      *
-     * @param checkinDate - the LocalDate represent
-     * @param checkoutDate
-     * @return
+     * @param checkinDate - a LocalDate variable represent the check-in date
+     * @param checkoutDate - a LocalDate variable represent the check-out date
+     * @return BookingHomePage .this
      */
     public BookingHomePage chooseCheckinAndCheckoutDate(LocalDate checkinDate, LocalDate checkoutDate) {
         Assert.assertTrue(checkoutDate.isAfter(checkinDate));

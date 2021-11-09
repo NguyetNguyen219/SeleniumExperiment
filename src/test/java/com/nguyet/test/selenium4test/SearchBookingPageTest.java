@@ -9,7 +9,6 @@ import org.testng.asserts.SoftAssert;
 import java.time.LocalDate;
 import java.time.Month;
 
-
 public class SearchBookingPageTest extends SeleniumBaseTest {
 
     private String destination = "Paris";
