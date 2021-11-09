@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/log/
+/build/
+.idea
+.gradle
+### Java ###
+*.class
+# Ignore Gradle GUI config
+gradle-app.setting
