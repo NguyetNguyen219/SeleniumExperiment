@@ -10,15 +10,14 @@ public abstract class SeleniumBaseTest extends BaseTest {
 
     protected WebDriver driver;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void preCondition() {
         driver = DriverWrapper.getDriver();
         driver.navigate().to("https://www.booking.com");
         driver.manage().window().maximize();
-//        Helper.implicitWait(Helper.PAGE_LOAD_TIME);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void postCondition() {
         driver.quit();
     }

@@ -1,5 +1,6 @@
 package com.nguyet.test.core;
 
+import com.nguyet.test.BaseTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -27,6 +28,10 @@ public class DriverWrapper {
         if(driver == null)
             new DriverWrapper();
         return driver;
+    }
+
+    public static void reset() {
+        driver = null;
     }
 
     public static WebDriverWait getDriverWait() {

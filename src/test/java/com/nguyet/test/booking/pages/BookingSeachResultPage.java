@@ -1,5 +1,6 @@
-package com.nguyet.test.bookingweb.pages;
+package com.nguyet.test.booking.pages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,6 +12,15 @@ public class BookingSeachResultPage extends BookingBasePage {
 
     @FindBy(xpath = "//*[@class='_30227359d _0db903e42']")
     WebElement resultTitle;
+
+    /**
+     * Constructor
+     *
+     * @param webDriver is the main webDriver
+     */
+    public BookingSeachResultPage(WebDriver webDriver) {
+        super(webDriver);
+    }
 
     public void waitForVisibilityOfResultTitle() {
         wait.until(ExpectedConditions.visibilityOf(resultTitle));

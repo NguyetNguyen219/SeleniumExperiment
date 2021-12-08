@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
-    <test verbose="2" preserve-order="true"
-          name="C:/Users/Nguyet_Nguyen/IdeaProjects/SeleniumExperiment/src/test/java/BaseTest.java">
-        <classes/>
+<suite name="Default suit">
+    <test verbose="2" name="Allure report with testNG">
+        <classes>
+            <class name="com.nguyet.test.selenium4test.SearchBookingPageTest"/>
+        </classes>
     </test>
 </suite>

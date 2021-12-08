@@ -1,14 +1,12 @@
-package com.nguyet.test.bookingweb.utils;
+package com.nguyet.test.booking.utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class DateConverter {
 
-    private static DateTimeFormatter formatter;
-
     public static String convertYearMonth(LocalDate date) {
-        formatter = DateTimeFormatter.ofPattern("LLLL yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("LLLL yyyy");
 
         return date.format(formatter);
     }

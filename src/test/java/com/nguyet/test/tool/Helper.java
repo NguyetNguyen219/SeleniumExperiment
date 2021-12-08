@@ -11,7 +11,7 @@ import java.time.Duration;
  */
 public final class Helper {
 
-    private static WebDriver driver = DriverWrapper.getDriver();
+//    private static WebDriver driver = DriverWrapper.getDriver();
 
     /**
      * variable type Long
@@ -33,9 +33,4 @@ public final class Helper {
      * represent the time wait for loading page (time unit)
      */
     public static long PAGE_LOAD_TIME = 10;
-
-
-    public static void implicitWait(long seconds) {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(seconds));
-    }
 }

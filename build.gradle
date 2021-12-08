@@ -1,5 +1,16 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "io.qameta.allure.gradle.allure:allure-plugin:2.9.6"
+    }
+}
+
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.9.6'
 }
 
 group 'com.nguyet.test'
@@ -7,6 +18,7 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+//    jcenter()
 }
 
 sourceSets {
@@ -17,15 +29,66 @@ sourceSets {
     }
 }
 
+//configurations {
+//    ajc
+//    aspects
+//    compile {
+//        extendsFrom aspects
+//    }
+//}
+
 dependencies {
-    implementation 'org.seleniumhq.selenium:selenium-java:4.0.0-rc-2'
+    implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+//    implementation 'io.qameta.allure:allure-testng:2.16.1'
+    implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.16.1'
+
     implementation 'org.testng:testng:7.4.0'
-    implementation 'org.apache.logging.log4j:log4j-api:2.13.3'
-    implementation 'org.apache.logging.log4j:log4j-core:2.13.3'
-//    implementation 'io.qameta.allure:allure-testng:2.13.1'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.1.0'
     testImplementation 'org.slf4j:slf4j-nop:2.0.0-alpha1'
+}
+
+allure {
+    version = '2.9.6'
+//    aspectjweaver = true
+    autoconfigure = true
 }
 
 test {
     useTestNG()
 }
+
+//def aspectj = { destDir, aspectPath, inpath, classpath ->
+//    ant.taskdef(resource: "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties",
+//            classpath: configurations.ajc.asPath)
+//
+//    ant.iajc(
+//            maxmem: "1024m", fork: "true", Xlint: "ignore",
+//            destDir: destDir,
+//            aspectPath: aspectPath,
+//            inpath: inpath,
+//            classpath: classpath,
+//            source: project.sourceCompatibility,
+//            target: project.targetCompatibility
+//    )
+//}
+
+//compileJava {
+//    doLast {
+//        aspectj project.sourceSets.main.output.classesDirs.absolutePath,
+//                configurations.aspects.asPath,
+//                project.sourceSets.main.output.classesDirs.absolutePath,
+//                project.sourceSets.main.runtimeClasspath.asPath
+//    }
+//}
+//
+//compileTestJava {
+//    dependsOn jar
+//
+//    doLast {
+//        aspectj project.sourceSets.test.output.classesDirs.absolutePath,
+//                configurations.aspects.asPath + jar.archivePath,
+//                project.sourceSets.test.output.classesDirs.absolutePath,
+//                project.sourceSets.test.runtimeClasspath.asPath
+//    }
+//}

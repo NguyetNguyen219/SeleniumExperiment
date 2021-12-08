@@ -1,41 +1,39 @@
-package com.nguyet.test.bookingweb.pages;
+package com.nguyet.test.booking.pages;
 
 import com.nguyet.test.BaseTest;
-import com.nguyet.test.bookingweb.utils.DateConverter;
+import com.nguyet.test.booking.utils.DateConverter;
 import com.nguyet.test.core.DriverWrapper;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class BookingHomePage extends BookingBasePage {
 
-    @FindBy(className = "sb-searchbox__title-text")
+    By searchTitleBy = By.xpath("//span[@class='sb-searchbox__title-text']");
     WebElement searchTitle;
 
-    @FindBy(id = "ss")
+    By destinationFieldBy = By.id("ss");
     WebElement destinationField;
 
-    @FindBy(xpath = "//div[@data-mode='checkin']")
+    By checkinDateFieldBy = By.xpath("//div[@data-mode='checkin']");
     WebElement checkinDateField;
 
-    @FindBy(xpath = "//*[@class='xp__input-group xp__guests']")
+    By groupFieldBy = By.xpath("//*[@class='xp__input-group xp__guests']");
     WebElement groupField;
 
-    @FindBy(className = "bui-calendar")
+    By calendarPaneBy = By.className("bui-calendar");
     WebElement calendarPane;
 
-    @FindBy(id = "xp__guests__inputs-container")
-    WebElement groupInputPane;
-
-    @FindBy(xpath = "//div[@data-bui-ref='calendar-next']")
+    By calendarNextBtnBy = By.xpath("//div[@data-bui-ref='calendar-next']");
     WebElement calendarNextBtn;
 
-    @FindBy(xpath = "//*[@class='sb-searchbox__button ']")
+    By searchBtnBy = By.xpath("//*[@class='sb-searchbox__button ']");
     WebElement searchBtn;
 
     By increaseAdultBtnBy = By.xpath("//button[@aria-label='Increase number of Adults']");
@@ -45,12 +43,25 @@ public class BookingHomePage extends BookingBasePage {
     List<WebElement> calendarMonths;
     List<WebElement> groupCurrentNumbers;
 
-    public void waitForVisibilityOfCalendar() {
-        wait.until(ExpectedConditions.visibilityOf(calendarPane));
+    /**
+     * Constructor
+     *
+     * @param webDriver
+     */
+    public BookingHomePage(WebDriver webDriver) {
+        super(webDriver);
     }
 
-    public String getSearchTitle() {
-        return searchTitle.getText();
+    public void waitForVisibilityOfCalendar() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(calendarPaneBy));
+    }
+
+    public void waitForVisibilityOfSearchTitle() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(searchTitleBy));
+    }
+
+    public void scrollIntoView(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     public Integer getNumberOfAdult() {
@@ -65,7 +76,10 @@ public class BookingHomePage extends BookingBasePage {
      * @param destination - a string name of city or province
      * @return BookingHomePage .this
      */
+    @Step("Set the destination as {destination}")
     public BookingHomePage setTextToDestinationField(String destination) {
+        destinationField = driver.findElement(destinationFieldBy);
+        scrollIntoView(destinationField);
         BaseTest.LOGGER.info("Send '" + destination + "' to the destination field");
         destinationField.sendKeys(destination);
 
@@ -79,15 +93,14 @@ public class BookingHomePage extends BookingBasePage {
      * @param adults - int type of number of adults
      * @return BookingHomePage .this
      */
+    @Step("Set number of adults as {adults} in group field")
     public BookingHomePage setNumberOfAdultsInGroupField(int adults) {
-        Assert.assertTrue(groupInputPane.isDisplayed());
-
-        WebElement increaseBtn = DriverWrapper.getDriver().findElement(increaseAdultBtnBy);
-        WebElement decreaseBtn = DriverWrapper.getDriver().findElement(decreaseAdultBtnBy);
+        WebElement increaseBtn = driver.findElement(increaseAdultBtnBy);
+        WebElement decreaseBtn = driver.findElement(decreaseAdultBtnBy);
 
         int adult_count;
         do {
-            groupCurrentNumbers = DriverWrapper.getDriver().findElements(groupCurrentNumbersBy);
+            groupCurrentNumbers = driver.findElements(groupCurrentNumbersBy);
             adult_count = getNumberOfAdult();
 
             if (adult_count < adults) {
@@ -104,24 +117,30 @@ public class BookingHomePage extends BookingBasePage {
      * method click the search booking button
      * @return BookingSeachResultPage .this
      */
+    @Step("Click search button")
     public BookingSeachResultPage clickSearchButton() {
+        searchBtn = driver.findElement(searchBtnBy);
         searchBtn.click();
 
-        return new BookingSeachResultPage();
+        return new BookingSeachResultPage(driver);
     }
 
     /**
      * method click the check-in date field to show up a calendar
      * @return BookingHomePage .this
      */
+    @Step("Click check-in date field")
     public BookingHomePage clickCheckinDateField() {
+        checkinDateField = driver.findElement(checkinDateFieldBy);
         BaseTest.LOGGER.info("Click the checkin date field");
         checkinDateField.click();
 
         return this;
     }
 
+    @Step("Click group guest field")
     public BookingHomePage clickGroupGuestField() {
+        groupField = driver.findElement(groupFieldBy);
         BaseTest.LOGGER.info("Click the guests group & room field");
         groupField.click();
 
@@ -134,10 +153,8 @@ public class BookingHomePage extends BookingBasePage {
      * @param date - a LocalDate variable represent the check-in date
      * @return BookingHomePage .this
      */
+    @Step("Choose check-in date as {date}")
     public BookingHomePage chooseCheckinDate(LocalDate date) {
-        Assert.assertFalse(date.isBefore(LocalDate.now()));
-        waitForVisibilityOfCalendar();
-
         BaseTest.LOGGER.info("Choose the checkin date as " + date);
         pickDayInCalendar(date);
 
@@ -151,10 +168,11 @@ public class BookingHomePage extends BookingBasePage {
      * @param checkoutDate - a LocalDate variable represent the check-out date
      * @return BookingHomePage .this
      */
+    @Step("Choose check-out date as {checkoutDate}")
     public BookingHomePage chooseCheckinAndCheckoutDate(LocalDate checkinDate, LocalDate checkoutDate) {
-        Assert.assertTrue(checkoutDate.isAfter(checkinDate));
-
         waitForVisibilityOfCalendar();
+        calendarPane = driver.findElement(calendarPaneBy);
+
         chooseCheckinDate(checkinDate);
 
         BaseTest.LOGGER.info("Choose the checkout date as " + checkoutDate);
@@ -169,13 +187,12 @@ public class BookingHomePage extends BookingBasePage {
      * @param date - LocalDate type of the date want to choose
      */
     private void pickDayInCalendar(LocalDate date) {
-        Assert.assertTrue(calendarPane.isDisplayed());
-
         String yearMonth = DateConverter.convertYearMonth(date);
+        calendarNextBtn = driver.findElement(calendarNextBtnBy);
 
         boolean hasMonth;
         do {
-            calendarMonths = DriverWrapper.getDriver().findElements(calendarMonthBy);
+            calendarMonths = driver.findElements(calendarMonthBy);
             hasMonth = calendarMonths
                     .stream()
                     .anyMatch(e -> e.getText().contains(yearMonth));
@@ -184,11 +201,9 @@ public class BookingHomePage extends BookingBasePage {
                 calendarNextBtn.click();
             }
         } while (!hasMonth);
+
         // Choose the date in the calendar
-        WebElement day = DriverWrapper.getDriver()
-                .findElement(By.xpath("//span[@aria-label='" +
-                        date.getDayOfMonth() + " " +
-                        yearMonth + "']"));
-        day.click();
+        driver.findElement(By.xpath("//span[@aria-label='" +
+                        date.getDayOfMonth() + " " + yearMonth + "']")).click();
     }
 }
